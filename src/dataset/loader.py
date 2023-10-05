@@ -10,107 +10,6 @@ from dataset.utils import tprint
 from transformers import BertTokenizer
 import dataset.stats as stats
 
-def _get_20newsgroup_classes(args):
-    '''
-        @return list of classes associated with each split
-    '''
-    label_dict = {
-            'talk.politics.mideast': 0,
-            'sci.space': 1,
-            'misc.forsale': 2,
-            'talk.politics.misc': 3,
-            'comp.graphics': 4,
-            'sci.crypt': 5,
-            'comp.windows.x': 6,
-            'comp.os.ms-windows.misc': 7,
-            'talk.politics.guns': 8,
-            'talk.religion.misc': 9,
-            'rec.autos': 10,
-            'sci.med': 11,
-            'comp.sys.mac.hardware': 12,
-            'sci.electronics': 13,
-            'rec.sport.hockey': 14,
-            'alt.atheism': 15,
-            'rec.motorcycles': 16,
-            'comp.sys.ibm.pc.hardware': 17,
-            'rec.sport.baseball': 18,
-            'soc.religion.christian': 19,
-        }
-
-    val_classes = list(range(5))
-    train_classes = list(range(5, 13))
-    test_classes = list(range(13, 20))
-
-    return train_classes, val_classes, test_classes
-
-
-def _get_amazon_classes(args):
-    '''
-        @return list of classes associated with each split
-    '''
-    label_dict = {
-        'Amazon_Instant_Video': 0,
-        'Apps_for_Android': 1,
-        'Automotive': 2,
-        'Baby': 3,
-        'Beauty': 4,
-        'Books': 5,
-        'CDs_and_Vinyl': 6,
-        'Cell_Phones_and_Accessories': 7,
-        'Clothing_Shoes_and_Jewelry': 8,
-        'Digital_Music': 9,
-        'Electronics': 10,
-        'Grocery_and_Gourmet_Food': 11,
-        'Health_and_Personal_Care': 12,
-        'Home_and_Kitchen': 13,
-        'Kindle_Store': 14,
-        'Movies_and_TV': 15,
-        'Musical_Instruments': 16,
-        'Office_Products': 17,
-        'Patio_Lawn_and_Garden': 18,
-        'Pet_Supplies': 19,
-        'Sports_and_Outdoors': 20,
-        'Tools_and_Home_Improvement': 21,
-        'Toys_and_Games': 22,
-        'Video_Games': 23
-    }
-
-    val_classes = list(range(5))
-    test_classes = list(range(5, 14))
-    train_classes = list(range(14, 24))
-
-    return train_classes, val_classes, test_classes
-
-
-def _get_huffpost_classes(args):
-    '''
-        @return list of classes associated with each split
-    '''
-
-    val_classes = list(range(5))
-    train_classes = list(range(5, 25))
-    test_classes = list(range(25, 41))
-
-    return train_classes, val_classes, test_classes
-
-
-def _get_reuters_classes(args):
-    '''
-        @return list of classes associated with each split
-    '''
-
-    train_classes = list(range(15))
-    val_classes = list(range(15, 20))
-    test_classes = list(range(20, 31))
-
-    return train_classes, val_classes, test_classes
-
-'''def _get_stego_classes(args):
-    train_classes = [0, 1,2,3,4,5,6]
-    val_classes = [0, 7,8,9]
-    test_classes = [0, 10, 11, 12]
-    return train_classes, val_classes, test_classes'''
-
 def _get_stego_classes(args):
     train_classes = [0,1,2,3,4,5,6,7,8,9,10]#[0,1,2,3,4,5,6]#[0,1,2,3,4,5,6,7,8,9,10]
     val_classes = [0,11,12,13,14]
@@ -123,29 +22,6 @@ def _get_stego_draw_classes(args):
     test_classes = [16,18,21]#[15,16,17]
     return train_classes, val_classes, test_classes
 
-def _get_stego_classes11(args):
-    train_classes = [0,1,2,3]
-    val_classes = [0,4,5,6]
-    test_classes = [7,8,9,10]
-    return train_classes, val_classes, test_classes
-
-def _get_stego_classes13(args):
-    train_classes = [0,1,2,3,4]
-    val_classes = [0,5,6,7]
-    test_classes = [8,9,10,11,12]
-    return train_classes, val_classes, test_classes
-
-def _get_stego_31classes(args):
-    train_classes = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-    val_classes = [0,17,18,19,20,21]
-    test_classes = [22,23,24,25,26,27,28,29,30,31]
-    return train_classes, val_classes, test_classes
-
-def _get_stego_312classes(args):
-    train_classes = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
-    val_classes = [0,17,18,19,20,21,22,23,24,25]
-    test_classes = [26,27,28,29,30,31]
-    return train_classes, val_classes, test_classes
 
 def _load_json(path):
     '''
@@ -260,10 +136,8 @@ def _data_to_nparray(data, vocab, args):
     raw = np.array([e['text'] for e in data], dtype=object)
 
     if args.bert:
-        # /opt/anaconda/envs/torch_py3.6/lib/python3.6/site-packages/transformers/bert-base-uncased/
-        # /opt/anaconda/envs/torch_py3.6/lib/python3.6/site-packages
         tokenizer = BertTokenizer.from_pretrained(
-            "/home/zxs/text-meta/bert-base-uncased/", do_lower_case=True)
+            args.pretrained_bert, do_lower_case=True)
 
         # convert to wpe
         vocab_size = 0  # record the maximum token id for computing idf
@@ -373,34 +247,17 @@ def _split_dataset(data, finetune_split):
 
 
 def load_dataset(args):
-    if args.dataset == '20newsgroup':
-        train_classes, val_classes, test_classes = _get_20newsgroup_classes(args)
-    elif args.dataset == 'amazon':
-        train_classes, val_classes, test_classes = _get_amazon_classes(args)
-    elif args.dataset == 'fewrel':
-        train_classes, val_classes, test_classes = _get_fewrel_classes(args)
-    elif args.dataset == 'huffpost':
-        train_classes, val_classes, test_classes = _get_huffpost_classes(args)
-    elif args.dataset == 'reuters':
-        train_classes, val_classes, test_classes = _get_reuters_classes(args)
-    elif args.dataset == 'rcv1':
-        train_classes, val_classes, test_classes = _get_rcv1_classes(args)
-    elif args.dataset == 'stego':
+
+    if args.dataset == 'stego':
         train_classes, val_classes, test_classes = _get_stego_classes(args)
-    elif args.dataset == 'stego11':
-        train_classes, val_classes, test_classes = _get_stego_classes11(args)
-    elif args.dataset == 'stego13':
-        train_classes, val_classes, test_classes = _get_stego_classes13(args)
+
     elif args.dataset == 'stego_draw':
         train_classes, val_classes, test_classes = _get_stego_draw_classes(args)
-    elif args.dataset == 'stego31':
-        train_classes, val_classes, test_classes = _get_stego_31classes(args)
-    elif args.dataset == 'stego31_6':
-        train_classes, val_classes, test_classes = _get_stego_312classes(args)
+
     else:
         raise ValueError(
             'args.dataset should be one of'
-            '[20newsgroup, amazon, fewrel, huffpost, reuters, rcv1, stego]')
+            '[stego,stego_draw]')
 
     assert(len(train_classes) == args.n_train_class)
     assert(len(val_classes) == args.n_val_class)
