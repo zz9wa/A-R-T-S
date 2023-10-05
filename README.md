@@ -15,3 +15,10 @@
 cd ./arts/bin
 sh arts.sh
 ```
+### Code
+```
+`src/main.py` may be run with one of two modes: `train` and `test`.
+`src/model/ad_cnn.py`: Task-invariant Generator
+`src/model/modelD.py`: Discriminator
+`src/model/pullproto.py`: Task-relevant Projector
+```
