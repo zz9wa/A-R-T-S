@@ -25,20 +25,14 @@ class CXTEBD(nn.Module):
         super(CXTEBD, self).__init__()
 
         self.finetune_ebd = finetune_ebd
-        model_config = BertConfig.from_pretrained('/home/zxs/text-meta/bert-base-uncased/')
+        model_config = BertConfig.from_pretrained(pretrained_model_name_or_path)
         self.return_seq = return_seq
 
         print("{}, Loading pretrained bert".format(
             datetime.datetime.now().strftime('%02y/%02m/%02d %H:%M:%S')), flush=True)
 
         self.model = BertModel.from_pretrained(pretrained_model_name_or_path,#)
-                                              cache_dir='/home/zxs/text-meta/bert-base-uncased/model.ckpt.index',from_tf=False)
-        '''bert_model = '/home/zxs/multi-source/distilbert-base-uncased'
-        bert_config = DistilBertConfig.from_pretrained(bert_model, num_labels=2)
-        tokenizer = DistilBertTokenizer.from_pretrained(bert_model)
-        bert = DistilBertForSequenceClassification.from_pretrained(bert_model, config=bert_config).to(device)
-        self.model = VanillaBert(bert).to(device)'''
-
+                                              cache_dir=cache_dir,from_tf=False)
         self.embedding_dim = self.model.config.hidden_size
         self.ebd_dim = self.model.config.hidden_size
 
