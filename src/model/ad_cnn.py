@@ -36,7 +36,7 @@ class ModelG_CNN(nn.Module):
         # scale = self.compute_score(data, ebd)
         # print("\ndata.shape:", ebd.shape)  # [b, text_len, 300]
 
-        # Generator部分
+        # Generator
         ebd = self.cnn(ebd, data)
         # ebd, (hn, cn) = self.lstm(ebd)
         # print("\ndata.shape:", ebd.shape)  # [b, text_len, 256]

@@ -96,7 +96,7 @@ class PullProto(BASE):
         sorted_YS, indices = torch.sort(YS)
         #print("indices:",indices)
         #print("XS:", XS)
-        #a = [aa.tolist() for aa in a]  # 列表中元素由tensor变成列表。
+        #a = [aa.tolist() for aa in a]
 
         #XS_1=torch.cat(XS,dim=0)
         #indices=torch.cat(indices,dim=0)
