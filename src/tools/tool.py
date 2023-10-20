@@ -81,7 +81,7 @@ def parse_args():
     parser.add_argument("--ExponentialLR_gamma", type=float, default=0.98, help="ExponentialLR_gamma")
     parser.add_argument("--train_mode", type=str, default=None, help="you can choose t_add_v or None")
     parser.add_argument("--ablation", type=str, default="", help="ablation study:[-DAN, -IL]")
-    parser.add_argument("--path_drawn_data", type=str, default="/home/zxs/tart_malda/bin/reuters_False_data.json", help="path_drawn_data")
+    parser.add_argument("--path_drawn_data", type=str, default="", help="path_drawn_data")
     parser.add_argument("--Comments", type=str, default="", help="Comments")
     parser.add_argument("--id2word", default=None, help="id2word")
 
